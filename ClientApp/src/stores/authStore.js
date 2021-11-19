@@ -1,5 +1,6 @@
 import {makeAutoObservable} from "mobx";
 import jwtDecode from "jwt-decode";
+import lessonStore from "./lessonStore";
 
 const initialToken = localStorage.getItem('token');
 
@@ -20,10 +21,14 @@ class AuthStore {
         this.isAdmin = jwtDecode(token).role === 'admin';
     }
 
-    logout(){
+    logout() {
         localStorage.removeItem('token');
         this.isLoggedIn = false;
         this.isAdmin = false;
+        this.currentUser = null;
+        this.currentUserStats = null;
+        this.users = [];
+        lessonStore.lessons = [];
     }
 
     getCurrentUserEmail(){

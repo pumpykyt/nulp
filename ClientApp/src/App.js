@@ -14,9 +14,6 @@ import TeacherPanel from "./components/TeacherPanel/TeacherPanel";
 import userService from "./services/userService";
 
 const App = observer(() => {
-    useEffect(() => {
-        userService.getCurrentUser();
-    }, []);
 
     return (
         <div className="app min-h-screen">

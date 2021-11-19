@@ -10,8 +10,9 @@ class AuthService{
             apiStore.setIsFetching(true)
             const response = await myAxios.post('/api/auth/register', {
                 email: data.email,
-                userName: data.email,
-                password: data.password
+                userName: data.userName,
+                password: data.password,
+                groupName: data.groupName
             })
             history.push('/')
             console.log(response)

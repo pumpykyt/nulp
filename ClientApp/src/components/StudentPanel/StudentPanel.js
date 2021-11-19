@@ -9,12 +9,17 @@ import markStore from "../../stores/markStore";
 import {Link} from "react-router-dom";
 import markService from "../../services/markService";
 import authService from "../../services/authService";
+import jwtDecode from "jwt-decode";
 
 const StudentPanel = observer(() => {
     const [base64, setBase64] = useState('')
 
     useEffect(() => {
-        lessonService.getLessons(authStore.currentUser.groupName);
+        userService.getCurrentUser();
+    }, []);
+
+    useEffect(() => {
+        lessonService.getLessons(jwtDecode(localStorage.getItem('groupName')));
         userService.getUserStats();
         markService.getUserMarks();
         var image = document.getElementById("user-image");

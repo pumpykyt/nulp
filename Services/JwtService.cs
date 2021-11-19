@@ -36,7 +36,8 @@ namespace lpnu.Services
                     new Claim(JwtRegisteredClaimNames.Email, user.Email),
                     new Claim(JwtRegisteredClaimNames.Sub, user.Email),
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                    new Claim("role", userRoles[0])
+                    new Claim("role", userRoles[0]),
+                    new Claim("groupName", user.GroupName)
                 }),
                 Expires = DateTime.Now.AddHours(24),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
