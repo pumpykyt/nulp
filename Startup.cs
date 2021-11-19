@@ -1,5 +1,7 @@
 using System.IO;
 using System.Text;
+using DinkToPdf;
+using DinkToPdf.Contracts;
 using lpnu.Configs;
 using lpnu.Data;
 using lpnu.Data.Entities;
@@ -89,6 +91,8 @@ namespace lpnu
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<ILessonService, LessonService>();
             services.AddScoped<ISubjectService, SubjectService>();
+            services.AddScoped<IPdfService, PdfService>();
+            services.AddSingleton(typeof(IConverter), new SynchronizedConverter(new PdfTools()));
             
             //configs
             services.Configure<JwtConfig>(Configuration.GetSection("JwtConfig"));

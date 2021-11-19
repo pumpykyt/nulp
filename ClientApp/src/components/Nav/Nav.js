@@ -18,7 +18,7 @@ const Nav = observer(() => {
                 { authStore.isAdmin && <Link className="text-md font-regular text-white self-center justify-self-end" to="/teacher/panel">
                     Адмін панель
                 </Link>}
-                { !authStore.isAdmin && authStore.isLoggedIn && <Link className="text-md font-regular text-white self-center justify-self-end" to="/student/panel">
+                { !authStore.isAdmin && authStore.isLoggedIn && <Link className="text-md font-regular text-white self-center justify-self-end" to="/student">
                     Панель студента
                 </Link>}
                 { authStore.isLoggedIn &&

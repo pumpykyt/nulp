@@ -1,7 +1,9 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
+using Google.Protobuf.WellKnownTypes;
 using lpnu.Dtos;
 using lpnu.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace lpnu.Controllers
@@ -11,10 +13,12 @@ namespace lpnu.Controllers
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
+        private readonly IPdfService _pdfService;
 
-        public UserController(IUserService userService)
+        public UserController(IUserService userService, IPdfService pdfService)
         {
             _userService = userService;
+            _pdfService = pdfService;
         }
 
         [HttpPost("upload-image")]
@@ -46,6 +50,13 @@ namespace lpnu.Controllers
             var userId = User.Claims.Single(t => t.Type == "id").Value;
             var result = await _userService.GetUserStatsAsync(userId);
             return Ok(result);
+        }
+        
+        [HttpGet("stats/pdf")]
+        public async Task<IActionResult> GetUserStatsPdfAsync(string userId)
+        {
+            var result = await _pdfService.CreatePdf(userId);
+            return File(result, "application/pdf");
         }
     }
 }

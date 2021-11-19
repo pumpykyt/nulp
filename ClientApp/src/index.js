@@ -6,8 +6,8 @@ import App from './App';
 import registerServiceWorker from './registerServiceWorker';
 import 'antd/dist/antd.css';
 
-//console.error = () => {};
-//console.warn = () => {};
+console.error = () => {};
+console.warn = () => {};
 const baseUrl = document.getElementsByTagName('base')[0].getAttribute('href');
 const rootElement = document.getElementById('root');
 
@@ -15,7 +15,7 @@ ReactDOM.render(
   <BrowserRouter basename={baseUrl}>
     <App />
   </BrowserRouter>,
-  rootElement);
+    rootElement);
 
 registerServiceWorker();
 

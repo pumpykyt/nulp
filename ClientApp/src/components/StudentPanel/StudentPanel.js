@@ -10,6 +10,8 @@ import {Link} from "react-router-dom";
 import markService from "../../services/markService";
 import authService from "../../services/authService";
 import jwtDecode from "jwt-decode";
+import {toJS} from "mobx";
+import myAxios from "../../myAxios";
 
 const StudentPanel = observer(() => {
     const [base64, setBase64] = useState('')
@@ -19,7 +21,7 @@ const StudentPanel = observer(() => {
     }, []);
 
     useEffect(() => {
-        lessonService.getLessons(jwtDecode(localStorage.getItem('groupName')));
+        lessonService.getLessons(authStore.groupName);
         userService.getUserStats();
         markService.getUserMarks();
         var image = document.getElementById("user-image");
@@ -95,14 +97,18 @@ const StudentPanel = observer(() => {
         await userService.uploadUserImage({base64});
     }
 
+    const generatePdf = () => {
+        window.open('/api/user/stats/pdf?userId=' + authStore.currentUser.id, '_blank', 'noopener,noreferrer');
+    }
+
     return(
-        <div className="student-panel w-screen h-screen bg-blue-500">
-            <div className="container grid h-screen">
-                <div className="h-5/6 bg-gray-200 self-center rounded-2xl p-5 grid grid-cols-4">
+        <div className="student-panel w-full min-h-screen bg-blue-500">
+            <div className="container grid pt-28">
+                <div className="bg-gray-200 self-center rounded-2xl p-5 grid grid-cols-4">
                     <div className="text-center media grid grid-cols-1 gap-3 bg-gray-300 p-3 rounded-l-2xl">
-                        <h2 className="text-xl font-regular m-0">ПІП:</h2>
-                        <h3 className="text-lg text-black font-light">{authStore.currentUser.userName}</h3>
-                        <h2 className="text-xl font-regular m-0">Мій аватар:</h2>
+                        <div className="text-xl font-regular m-0">ПІП:</div>
+                        <div className="text-lg text-black font-light">{authStore.currentUser.userName}</div>
+                        <div className="text-xl font-regular m-0">Мій аватар:</div>
                         <img
                             id="user-image"
                             src={'https://localhost:5001/wwwroot/' + authStore.currentUser.imagePath}
@@ -116,14 +122,15 @@ const StudentPanel = observer(() => {
                         <button onClick={async() => await uploadUserImage()} className="bg-blue-500 text-white font-regular py-2 rounded-lg">Зберегти</button>
                     </div>
                     <div className="data bg-gray-500 rounded-r-2xl col-span-3 p-3">
-                        <h2 className="text-xl text-white font-regular mb-2">Мої уроки:</h2>
+                        <div className="text-xl text-white font-regular mb-2">Мої уроки:</div>
                         <Table pagination={{ pageSize: 6}} columns={lessonsColumns} dataSource={[...lessonStore.lessons]}/>
-                        <h2 className="text-xl text-white font-regular mb-2">Мої оцінки:</h2>
+                        <div className="text-xl text-white font-regular mb-2">Мої оцінки:</div>
                         <Table pagination={{ pageSize: 6}} columns={marksColumns} dataSource={[...markStore.marks]}/>
-                        <div className="user-stats ">
-                            <h2 className="text-xl text-white font-regular mb-2">Статистика:</h2>
-                            <h3 className="text-lg text-white font-light">Середній бал: {authStore.currentUserStats.averageMark}</h3>
+                        <div id="user-stats" className="user-stats ">
+                            <div className="text-xl text-white font-regular mb-2">Статистика:</div>
+                            <div className="text-lg text-white font-light">Середній бал: {authStore.currentUserStats.averageMark}</div>
                         </div>
+                        <Button onClick={generatePdf}>Згенерувати pdf</Button>
                     </div>
                 </div>
             </div>
